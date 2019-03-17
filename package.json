@@ -44,7 +44,7 @@
 					"default": "/src",
 					"description": "Root folder for csv Move. All paths will be calculatioed from this folder."
 				},
-				"vscMove.fileExtensionToTransform": {
+				"vscMove.fileToHandle": {
 					"type": "string",
 					"default": "css,scss,ts,tsx,js,jsx",
 					"description": "File extansions that vsc Move will handle."

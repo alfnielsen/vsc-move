@@ -1,8 +1,8 @@
-'use strict'
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import * as vscode from 'vscode'
 
+'use strict'
 export default class Move {
 	/**
 	 * Save all files.
@@ -27,9 +27,9 @@ export default class Move {
 		if (pattern === undefined) {
 			let rootPath = this.getConfig('rootPath', '/src')
 			rootPath = this.trimLeadingDash(rootPath);
-			let fileExtensionToTransform = this.getConfig('fileExtensionToTransform', 'css,scss,ts,tsx,js,jsx')
-			fileExtensionToTransform.replace(/\s/, '') //trim spaces!
-			pattern = `${rootPath}/**/*.{${fileExtensionToTransform}}`
+			let fileToHandle = this.getConfig('fileToHandle', 'css,scss,ts,tsx,js,jsx')
+			fileToHandle.replace(/\s/, '') //trim spaces!
+			pattern = `${rootPath}/**/*.{${fileToHandle}}`
 		}
 		const files = await vscode.workspace.findFiles(pattern, '**/node_modules/**', 100000)
 		return files
