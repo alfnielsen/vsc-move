@@ -44,10 +44,10 @@ For **typescript** projects:
 
 ```
 {
-	"compilerOptions": {
-    ...
-		"baseUrl": "/src",
-	}
+   "compilerOptions": {
+      ...
+      "baseUrl": "/src",
+   }
 }
 ```
 
