@@ -25,7 +25,7 @@ So if that is not what you want, then dont use this extansion!
 **rootPath**
 Default value is '/src'
 
-**fileToHandle**
+**filesToHandle**
 Comma seperated list of file extansions that vsc-move will handle.
 vsc-move will update all import in these files.
 

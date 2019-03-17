@@ -27,9 +27,9 @@ export default class Move {
 		if (pattern === undefined) {
 			let rootPath = this.getConfig('rootPath', '/src')
 			rootPath = this.trimLeadingDash(rootPath);
-			let fileToHandle = this.getConfig('fileToHandle', 'css,scss,ts,tsx,js,jsx')
-			fileToHandle.replace(/\s/, '') //trim spaces!
-			pattern = `${rootPath}/**/*.{${fileToHandle}}`
+			let filesToHandle = this.getConfig('filesToHandle', 'css,scss,ts,tsx,js,jsx')
+			filesToHandle.replace(/\s/, '') //trim spaces!
+			pattern = `${rootPath}/**/*.{${filesToHandle}}`
 		}
 		const files = await vscode.workspace.findFiles(pattern, '**/node_modules/**', 100000)
 		return files
