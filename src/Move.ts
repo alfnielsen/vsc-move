@@ -25,7 +25,8 @@ export default class Move {
 	 */
 	async getFiles(pattern?: string) {
 		if (pattern === undefined) {
-			let rootPath = this.getConfig('rootPath', 'css,scss,ts,tsx,js,jsx')
+			let rootPath = this.getConfig('rootPath', '/src')
+			rootPath = this.trimLeadingDash(rootPath);
 			let fileExtensionToTransform = this.getConfig('fileExtensionToTransform', 'css,scss,ts,tsx,js,jsx')
 			fileExtensionToTransform.replace(/\s/, '') //trim spaces!
 			pattern = `${rootPath}/**/*.{${fileExtensionToTransform}}`
