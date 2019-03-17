@@ -34,7 +34,23 @@
 				"command": "extension.vscMove",
 				"title": "vsc Move"
 			}
-		]
+		],
+		"configuration": {
+			"type": "object",
+			"title": "vsc Move configuration",
+			"properties": {
+				"vscMove.rootPath": {
+					"type": "string",
+					"default": "/src",
+					"description": "Root folder for csv Move. All paths will be calculatioed from this folder."
+				},
+				"vscMove.fileExtensionToTransform": {
+					"type": "string",
+					"default": "css,scss,ts,tsx,js,jsx",
+					"description": "File extansions that vsc Move will handle."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
