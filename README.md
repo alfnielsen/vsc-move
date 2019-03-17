@@ -20,6 +20,45 @@ So if that is not what you want, then dont use this extansion!
 2. Click 'vsc Move'
 3. Write new location and press enter
 
+## Project Absolute path
+
+You need to set absolute path in your project.
+
+
+For **javascript** projects:
+
+> jsconfig.json
+
+```
+{
+  "compilerOptions": {
+    ...
+    "baseUrl": "/src",
+  }
+}
+```
+
+For **typescript** projects:
+
+> tsconfig.json
+
+```
+{
+	"compilerOptions": {
+    ...
+		"baseUrl": "/src",
+	}
+}
+```
+
+For **create-react-app** projects:
+
+> .env
+
+```
+NODE_PATH=/src
+```
+
 ## Configuration
 
 **rootPath**
@@ -48,6 +87,10 @@ This can also be fix in future version.
 All path to file in the same folder or sub folder will get relative path starting with './'
 Its not all project that will use that convention.
 In the future this could maybe to set in a config property
+
+4. No intelligence for tsconfig paths.
+
+vsc-move dont scan tsconfig files, and it dont know anything about other kins of path manipulation.
 
 
 ## Related Projects
