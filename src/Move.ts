@@ -21,13 +21,14 @@ export default class Move {
 	}
 
 	/**
-	 * Get all relevant files. (Under src folder!)
+	 * Get all relevant files. (Under rootPath folder!)
 	 */
 	async getFiles(pattern?: string) {
 		if (pattern === undefined) {
+			let rootPath = this.getConfig('rootPath', 'css,scss,ts,tsx,js,jsx')
 			let fileExtensionToTransform = this.getConfig('fileExtensionToTransform', 'css,scss,ts,tsx,js,jsx')
 			fileExtensionToTransform.replace(/\s/, '') //trim spaces!
-			pattern = `src/**/*.{${fileExtensionToTransform}}`
+			pattern = `${rootPath}/**/*.{${fileExtensionToTransform}}`
 		}
 		const files = await vscode.workspace.findFiles(pattern, '**/node_modules/**', 100000)
 		return files
@@ -229,6 +230,7 @@ export default class Move {
 		// rewrite all imports then move then rewrite again!
 		await this.rewriteAllImport(rootPath, false)
 		await fs.move(path, newPath)
+		await this.updateImportInAllFilesForMovingItem(newPath, path, rootPath)
 		await this.rewriteAllImport(rootPath, true)
 	}
 
@@ -301,21 +303,20 @@ export default class Move {
 		return newSource
 	}
 
-	async moveFile(newPath: string, path: string, rootPath: string) {
-		const source = await this.getFileContent(path)
-		// Update imports in moving file:
-		const newDir = this.getDirFromPath(newPath)
-		await fs.ensureDir(newDir)
-		await this.saveFileContent(newPath, source)
-		const pathFromRoot = this.subtractPath(path, rootPath)
-		const newPathFromRoot = this.subtractPath(newPath, rootPath)
+	async updateImportInAllFilesForMovingItem(newPath: string, path: string, rootPath: string) {
+		let pathFromRoot = this.subtractPath(path, rootPath)
+		pathFromRoot = this.trimLeadingDash(pathFromRoot);
+		let newPathFromRoot = this.subtractPath(newPath, rootPath)
+		newPathFromRoot = this.trimLeadingDash(newPathFromRoot);
 		const files = await this.getFiles()
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i]
-			const source = await this.getFileContent(file.fsPath)
-			const newSource = source.replace(pathFromRoot, newPathFromRoot)
-			await this.saveFileContent(file.fsPath, newSource)
+			const source = await this.getFileContent(file.fsPath)		
+			const regexp = new RegExp(`((?:^|[\s\n]*\n)@?import\s*[^'"]*['"])${pathFromRoot}([^'"]*)(['"])`,'g')
+			if(source.match(regexp)){
+				const newSource = source.replace(regexp, `$1${newPathFromRoot}$2$3`)
+				await this.saveFileContent(file.fsPath, newSource)
+			}
 		}
 	}
-	async moveDir(path: string, rootPath: string) {}
 }
