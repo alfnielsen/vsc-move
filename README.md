@@ -71,6 +71,19 @@ vsc-move will update all import in these files.
 Default value is 'css,scss,ts,tsx,js,jsx'
 
 
+**excludePattern**
+vscMove will ignore all import paths that matches this excludePattern.
+
+If the project has files that uses imports from outside the rootPath,
+vscMove will update the import to full system parth.
+
+To avoid this you can add the excludePattern.
+
+EX: 
+If you use storybook library and have your stories inside the the rootPath but need to import configs from outside the rootPath, 
+you can exclude this with an regexp like this: ^.*\/\.storybook\/  (This will ignore all import includes '/.storybook/' )
+
+
 ## Know issues
 
 1. Absolute path has no prefix

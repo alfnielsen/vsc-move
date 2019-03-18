@@ -8,7 +8,7 @@
 		"url": "https://github.com/alfnielsen/vsc-move"
 	},
 	"homepage": "https://github.com/alfnielsen/vsc-move",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -48,6 +48,11 @@
 					"type": "string",
 					"default": "css,scss,ts,tsx,js,jsx",
 					"description": "File extansions that vsc Move will handle."
+				},
+				"vscMove.excludePattern": {
+					"type": "string",
+					"default": "",
+					"description": "Regexp patter (as string) that excludes updates of imports. Ex exclude: '.*\/\\.storybook\/' will exclude updatees of import '..\/.storybook\/reducers'"
 				}
 			}
 		}

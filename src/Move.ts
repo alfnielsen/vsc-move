@@ -4,6 +4,11 @@ import * as vscode from 'vscode'
 
 'use strict'
 export default class Move {
+
+	excludePattern?: RegExp = undefined;
+	matchImportRegex = /((?:^|[\s\n]*\n)@?import\s*[^'"]*['"])([^'"]*)['"]*/g
+
+
 	/**
 	 * Save all files.
 	 * Before scanning we need to save all files!!!
@@ -206,7 +211,6 @@ export default class Move {
 			value: devaultValue
 		})
 	}
-
 	/**
 	 * The main method that runs
 	 */
@@ -227,12 +231,20 @@ export default class Move {
 		if (!newPath) {
 			return
 		}
+		this.setupExcludePattern();
 		// rewrite all imports then move then rewrite again!
 		await this.rewriteAllImport(rootPath, false)
 		await fs.move(path, newPath)
 		await this.updateImportInAllFilesForMovingItem(newPath, path, rootPath)
 		await this.rewriteAllImport(rootPath, true)
 		this.showMessage('vsc Move finished')
+	}
+
+	setupExcludePattern(){
+		const excludePatternString = this.getConfig('excludePattern', undefined);
+		if(excludePatternString){
+			this.excludePattern = new RegExp(excludePatternString);
+		}
 	}
 
 	async rewriteAllImport(rootPath: string, subtractLocalPath: boolean) {
@@ -251,7 +263,13 @@ export default class Move {
 		}
 	}
 
-	matchImportRegex = /((?:^|[\s\n]*\n)@?import\s*[^'"]*['"])([^'"]*)['"]*/g
+	matchExcludeList(importPath: string){
+		if(this.excludePattern === undefined){
+			return false;
+		}
+		return this.excludePattern.test(importPath)
+	}
+
 	/**
 	 *
 	 * @param source
@@ -263,7 +281,11 @@ export default class Move {
 		source = source.replace(this.matchImportRegex, substring => {
 			const match = this.matchImportRegex.exec(source)
 			if (match) {
-				substring = this.changeMatchedImportToAbsolutePath(match, substring, path, rootPath, subtractLocalPath)
+				let importRelatriveToPath = match[2];
+				const exclude = this.matchExcludeList(importRelatriveToPath);
+				if(!exclude){
+					substring = this.changeMatchedImportToAbsolutePath(match, substring, path, rootPath, subtractLocalPath)
+				}
 			}
 			return substring
 		})
