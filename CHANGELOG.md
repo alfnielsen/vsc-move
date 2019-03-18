@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.7
+
+Fix typo in readme.
+
 ## 0.0.6
 
 Add new config: excludePattern
@@ -14,7 +18,7 @@ Remove '/' from know issues in readme.
 
 ## 0.0.3
 
-Fix '/' and '\\' dif in systems. 
+Fix '/' and '\\' dif in systems.
 Path in other file for imports witout file extension.
 
 ## 0.0.2
