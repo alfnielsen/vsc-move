@@ -73,22 +73,18 @@ Default value is 'css,scss,ts,tsx,js,jsx'
 
 ## Know issues
 
-1. Not working on unix/linus systems!!! (I believe)
-
-This is due to '/' vs '\\', and can be fix in the future!
-
-2. Absolute path has no prefix
+1. Absolute path has no prefix
 
 Some project works with absolute path prefix like '@'.
 This can also be fix in future version.
 
-3. './' relative paths settings missing.
+2. './' relative paths settings missing.
 
 All path to file in the same folder or sub folder will get relative path starting with './'
 Its not all project that will use that convention.
 In the future this could maybe to set in a config property
 
-4. No intelligence for tsconfig paths.
+3. No intelligence for tsconfig paths.
 
 vsc-move dont scan tsconfig files, and it dont know anything about other kins of path manipulation.
 

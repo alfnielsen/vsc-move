@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.4
+
+Remove '/' from know issues in readme.
+
 ## 0.0.3
 
 Fix '/' and '\\' dif in systems. 
