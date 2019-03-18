@@ -1,5 +1,10 @@
 # Change Log
 
+
+## 0.0.5
+
+Fix folder move, to ref in other files are correct.
+
 ## 0.0.4
 
 Remove '/' from know issues in readme.
