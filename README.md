@@ -1,6 +1,6 @@
 # vsc-move
 
-(vsc Extasion)
+(vscode Extesion)
 
 Fix problems with moving files in vscode.
 
@@ -12,7 +12,7 @@ All other ref will be from rootPath and will have no prefix (Not even '/')
 
 > vsc-move will update EVERY FILE under the definde rootPath (normally '/src')
 
-So if that is not what you want, then dont use this extansion!
+So if that is not what you want, then dont use this extension!
 
 ## Usage
 
@@ -23,7 +23,6 @@ So if that is not what you want, then dont use this extansion!
 ## Project Absolute path
 
 You need to set absolute path in your project.
-
 
 For **javascript** projects:
 
@@ -72,7 +71,6 @@ vsc-move will update all import in these files.
 
 Default value is 'css,scss,ts,tsx,js,jsx'
 
-
 **excludePattern**
 
 vscMove will ignore all import paths that matches this excludePattern.
@@ -82,10 +80,9 @@ vscMove will update the import to full system parth.
 
 To avoid this you can add the excludePattern.
 
-EX: 
-If you use storybook library and have your stories inside the the rootPath but need to import configs from outside the rootPath, 
-you can exclude this with an regexp like this: ^.*\/\.storybook\/  (This will ignore all import includes '/.storybook/' )
-
+EX:
+If you use storybook library and have your stories inside the the rootPath but need to import configs from outside the rootPath,
+you can exclude this with an regexp like this: ^.\*\/\.storybook\/ (This will ignore all import includes '/.storybook/' )
 
 ## Know issues
 
@@ -103,7 +100,6 @@ In the future this could maybe to set in a config property
 3. No intelligence for tsconfig paths.
 
 vsc-move dont scan tsconfig files, and it dont know anything about other kins of path manipulation.
-
 
 ## Related Projects
 
