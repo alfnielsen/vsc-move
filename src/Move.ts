@@ -21,6 +21,13 @@ export default class Move {
 	}
 
 	/**
+	 * Reaplve all '\\'  with '/'
+	 */
+	pathAsUnix(path: string) {
+		return path.replace(/\\/g, '/');
+	}
+
+	/**
 	 * Get all relevant files. (Under rootPath folder!)
 	 */
 	async getFiles(pattern?: string) {
