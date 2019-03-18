@@ -62,9 +62,11 @@ NODE_PATH=/src
 ## Configuration
 
 **rootPath**
+
 Default value is '/src'
 
 **filesToHandle**
+
 Comma seperated list of file extansions that vsc-move will handle.
 vsc-move will update all import in these files.
 
@@ -72,6 +74,7 @@ Default value is 'css,scss,ts,tsx,js,jsx'
 
 
 **excludePattern**
+
 vscMove will ignore all import paths that matches this excludePattern.
 
 If the project has files that uses imports from outside the rootPath,
@@ -104,6 +107,6 @@ vsc-move dont scan tsconfig files, and it dont know anything about other kins of
 
 ## Related Projects
 
-> vsc-scaffolding [https://github.com/alfnielsen/vsc-scaffolding]
+> vsc-scaffolding [ https://github.com/alfnielsen/vsc-scaffolding ]
 
-> vsc-script [https://github.com/alfnielsen/vsc-script]
+> vsc-script [ https://github.com/alfnielsen/vsc-script ]
