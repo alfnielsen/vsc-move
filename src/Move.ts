@@ -312,11 +312,11 @@ export default class Move {
 		newPathFromRoot = this.trimLeadingDash(newPathFromRoot);
 		// test remove of extenstion like .ts or .js
 		newPathFromRoot = newPathFromRoot.replace(/\.(tsx?|jsx?)$/,'');
+		const regexp = new RegExp(`((?:^|[\s\n]*\n)@?import\s*[^'"]*['"])${pathFromRoot}(\/[^'"]*)?(['"])`,'g')
 		const files = await this.getFiles()
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i]
-			const source = await this.getFileContent(file.fsPath)		
-			const regexp = new RegExp(`((?:^|[\s\n]*\n)@?import\s*[^'"]*['"])${pathFromRoot}([^'"]*)(['"])`,'g')
+			const source = await this.getFileContent(file.fsPath)
 			if(source.match(regexp)){
 				const newSource = source.replace(regexp, `$1${newPathFromRoot}$2$3`)
 				await this.saveFileContent(file.fsPath, newSource)
