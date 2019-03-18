@@ -68,7 +68,9 @@ export default class Move {
 	 * @param _path string
 	 */
 	getDirFromPath(_path: string) {
-		return path.dirname(_path)
+		let dir = path.dirname(_path)
+		dir = this.pathAsUnix(dir)
+		return dir;
 	}
 	/**
 	 * Get the folder path from a file path
@@ -80,21 +82,7 @@ export default class Move {
 		const name = splits[splits.length - 1]
 		return [dir, name]
 	}
-	/**
-	 * Get a relative path from one file to another
-	 * @param fromPath
-	 * @param toPath
-	 * @param removeExtraLayerForFile
-	 */
-	getRelativePath(fromPath: string, toPath: string, removeExtraLayerForFile = true): string {
-		const isDir = this.isDir(fromPath)
-		let relativePath = path.relative(fromPath, toPath)
-		//Files are seens as folder all other files be be one level down, so we have to remove first level:
-		if (!isDir && removeExtraLayerForFile) {
-			relativePath = relativePath.replace(/^..\//, '')
-		}
-		return relativePath
-	}
+
 	/**
 	 * path remove rootPath from a Path
 	 * User/some/project/underproject/folder1 -> underproject/folder1
@@ -167,19 +155,22 @@ export default class Move {
 		let realPath: string | undefined
 		try {
 			realPath = fs.realpathSync(path)
+			realPath = this.pathAsUnix(realPath)
 			return realPath
 		} catch (e) {}
 		try {
 			realPath = fs.realpathSync(path + '.js')
 			realPath = realPath.replace(/\.js$/, '')
+			realPath = this.pathAsUnix(realPath)
 			return realPath
 		} catch (e) {}
 		try {
 			realPath = fs.realpathSync(path + '.ts')
 			realPath = realPath.replace(/\.ts$/, '')
+			realPath = this.pathAsUnix(realPath)
 			return realPath
 		} catch (e) {}
-		return realPath
+		return undefined
 	}
 
 	getConfig<T>(property: string, defaultValue: T): T {
@@ -203,7 +194,8 @@ export default class Move {
 		if (!folder) {
 			throw new Error('getRootPath was called with incorrect uri! (The uri must be within the project!)')
 		}
-		return folder.uri.fsPath
+		const rootPath = this.pathAsUnix(folder.uri.fsPath);
+		return rootPath;
 	}
 	/**
 	 * Promp vscode user
@@ -223,7 +215,7 @@ export default class Move {
 			this.showMessage('This can only be run from right click context menu.')
 			return
 		}
-		const path = uri.fsPath
+		const path = this.pathAsUnix(uri.fsPath)
 		const isDir = await this.isDir(path)
 		let rootPath = this.getRootPath(uri)
 		// set root to project subfolder
@@ -240,6 +232,7 @@ export default class Move {
 		await fs.move(path, newPath)
 		await this.updateImportInAllFilesForMovingItem(newPath, path, rootPath)
 		await this.rewriteAllImport(rootPath, true)
+		this.showMessage('vsc Move finished')
 	}
 
 	async rewriteAllImport(rootPath: string, subtractLocalPath: boolean) {
@@ -314,8 +307,11 @@ export default class Move {
 	async updateImportInAllFilesForMovingItem(newPath: string, path: string, rootPath: string) {
 		let pathFromRoot = this.subtractPath(path, rootPath)
 		pathFromRoot = this.trimLeadingDash(pathFromRoot);
+		pathFromRoot = pathFromRoot.replace(/\.(tsx?|jsx?)$/,'');
 		let newPathFromRoot = this.subtractPath(newPath, rootPath)
 		newPathFromRoot = this.trimLeadingDash(newPathFromRoot);
+		// test remove of extenstion like .ts or .js
+		newPathFromRoot = newPathFromRoot.replace(/\.(tsx?|jsx?)$/,'');
 		const files = await this.getFiles()
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i]
