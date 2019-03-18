@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.0.3
+
+Fix '/' and '\\' dif in systems. 
+Path in other file for imports witout file extension.
+
 ## 0.0.2
 
 Update readme
