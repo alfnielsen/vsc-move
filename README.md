@@ -82,7 +82,7 @@ To avoid this you can add the excludePattern.
 
 EX:
 If you use storybook library and have your stories inside the the rootPath but need to import configs from outside the rootPath,
-you can exclude this with an regexp like this: ^.\*\/\.storybook\/ (This will ignore all import includes '/.storybook/' )
+you can exclude this with an regexp like this: ^.\*\\/\\.storybook\\/ (This will ignore all import includes '/.storybook/' )
 
 ## Know issues
 
