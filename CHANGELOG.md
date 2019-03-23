@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.0.8
+
+Fix renaming of ref to files with same name as current folder.
+
+Problem was this:
+src/modules/Home/Home.redux.js
+src/modules/Home/Home/Home.js
+In content of Home.js:
+import 'modules/home/Home.redux'
+-> 'import '.redux' (start by removing 'modules/Home/Home')
+-> 'import ./.redux' (then make it local ref)
+
+now it will:
+import 'modules/home/Home.redux'
+-> 'import 'modules/home/Home.redux' (try to remove 'modules/Home/Home/')
+
 ## 0.0.7
 
 Fix typo in readme.
