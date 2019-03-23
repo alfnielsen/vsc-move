@@ -103,6 +103,6 @@ vsc-move dont scan tsconfig files, and it dont know anything about other kins of
 
 ## Related Projects
 
-> vsc-scaffolding [ https://github.com/alfnielsen/vsc-scaffolding ]
-
 > vsc-script [ https://github.com/alfnielsen/vsc-script ]
+
+> vsc-scaffolding [ https://github.com/alfnielsen/vsc-scaffolding ]

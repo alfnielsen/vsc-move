@@ -1,54 +1,16 @@
 # Change Log
 
-## 0.0.8
+## 0.1.0
 
-Fix renaming of ref to files with same name as current folder.
+Update to version 0.1.0
 
-Problem was this:
-src/modules/Home/Home.redux.js
-src/modules/Home/Home/Home.js
-In content of Home.js:
-import 'modules/home/Home.redux'
--> 'import '.redux' (start by removing 'modules/Home/Home')
--> 'import ./.redux' (then make it local ref)
+Most code has been rewritten, add test.
+Almost 100 speed up and fix many errors.
 
-now it will:
-import 'modules/home/Home.redux'
--> 'import 'modules/home/Home.redux' (try to remove 'modules/Home/Home/')
+```
+Now most base logic is based on **vsc-base** (Whish soon will be a npm package) and added as dependensy in package.json.
+```
 
-## 0.0.7
+**vsc-base** is a package for esay vscode extension building and for vsc-script (related project).
 
-Fix typo in readme.
-
-## 0.0.6
-
-Add new config: excludePattern
-
-## 0.0.5
-
-Fix folder move, to ref in other files are correct.
-
-## 0.0.4
-
-Remove '/' from know issues in readme.
-
-## 0.0.3
-
-Fix '/' and '\\' dif in systems.
-Path in other file for imports witout file extension.
-
-## 0.0.2
-
-Update readme
-
-## 0.0.1
-
-Base code.
-
-All notable changes to the "vsc-move" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+(And changelog for version below has been removed.. You can find them in the git repository history fot his file is you want to see it.)
