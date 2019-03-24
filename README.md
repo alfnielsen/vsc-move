@@ -45,7 +45,7 @@ For **typescript** projects:
 {
    "compilerOptions": {
       ...
-      "baseUrl": "/src",
+      "baseUrl": "./src/",
    }
 }
 ```
