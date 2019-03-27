@@ -49,6 +49,7 @@ For **typescript** projects:
    }
 }
 ```
+> If you use **typescript** and **create-react-app** you need to move 'baseUrl' out in its own file and extend from it in tsconfig.json See [discussion on create-react-app's github](https://github.com/facebook/create-react-app/issues/5645)
 
 For **create-react-app** projects:
 
@@ -101,8 +102,14 @@ In the future this could maybe to set in a config property
 
 vsc-move dont scan tsconfig files, and it dont know anything about other kins of path manipulation.
 
-## Related Projects
+## Links and related projects
 
-> vsc-script [ https://github.com/alfnielsen/vsc-script ]
+> vsc-script [vscode-extension](https://marketplace.visualstudio.com/items?itemName=alfnielsen.vsc-script) | [source-code](https://github.com/alfnielsen/vsc-script)
 
-> vsc-scaffolding [ https://github.com/alfnielsen/vsc-scaffolding ]
+> vsc-base: [npm-module](https://www.npmjs.com/package/vsc-base) | [source-code](https://github.com/alfnielsen/vsc-base)
+
+> vsc-base.org: [documentation](http://vsc-base.org) | [source-code](https://github.com/alfnielsen/vsc-base.org)
+
+> vsc-scaffolding: [vscode-extension](https://marketplace.visualstudio.com/items?itemName=alfnielsen.vsc-scafolding) | [source-code](https://github.com/alfnielsen/vsc-scaffolding)
+
+> vsc-move: [vscode-extension](https://marketplace.visualstudio.com/items?itemName=alfnielsen.vsc-move) | [source-code](https://github.com/alfnielsen/vsc-move)
