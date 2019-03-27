@@ -2,6 +2,102 @@ import * as fs from 'fs-extra'
 import * as vscode from 'vscode'
 
 /**
+ * Create a LineReader (generator method) for a ReadStream
+ */
+const getLineStreamReader = (): generator =>
+	async function*(chunksAsync: fs.ReadStream): any {
+		let previous = ''
+		for await (const chunk of chunksAsync) {
+			previous += chunk
+			let eolIndex
+			while ((eolIndex = previous.indexOf('\n')) >= 0) {
+				// line includes the EOL
+				const line = previous.slice(0, eolIndex + 1)
+				yield line
+				previous = previous.slice(eolIndex + 1)
+			}
+		}
+		if (previous.length > 0) {
+			yield previous
+		}
+	}
+type generator = (chunksAsync: fs.ReadStream) => any
+
+/**
+ * Create a ImportReader (generator method) for a ReadStream
+ */
+const getImportStreamReader = (): generator =>
+	async function*(chunksAsync: fs.ReadStream): any {
+		let previous = ''
+		for await (const chunk of chunksAsync) {
+			previous += chunk
+
+			let eolIndex
+			while ((eolIndex = previous.indexOf('\n')) >= 0) {
+				// line includes the EOL
+				const line = previous.slice(0, eolIndex + 1)
+				yield line
+				previous = previous.slice(eolIndex + 1)
+			}
+		}
+		if (previous.length > 0) {
+			yield previous
+		}
+	}
+
+/**
+ * Get a fs.ReadStream
+ * @param path
+ */
+const getReadStream = (path: string) => {
+	const stream = fs.createReadStream(path, {
+		flags: 'r',
+		encoding: 'utf-8',
+		fd: undefined,
+		mode: 438, // 0666 in Octal
+		autoClose: false,
+		highWaterMark: 64 * 1024
+	})
+	return stream
+}
+/**
+ *
+ * @param path
+ * @param fail
+ * @param success
+ */
+const fileReadImports = async (
+	path: string,
+	fail: LineReadCondition,
+	success: LineReadCondition
+): Promise<
+	| false
+	| {
+			lineNumber: number
+	  }
+> => {
+	let stream = getReadStream(path)
+	let lineNumber = 0
+	let content = ''
+	const importReader = getImportStreamReader()
+	for await (const line of importReader(stream)) {
+		content += line
+
+		lineNumber++
+		if (fail(line, lineNumber)) {
+			stream.destroy()
+			return false
+		}
+		if (success(line, lineNumber)) {
+			stream.destroy()
+			return { lineNumber }
+		}
+	}
+	return false
+}
+type LineReadCondition = (line: string, lineNumber: number) => boolean
+
+/**
  * Transform an absolute path from root, to a relative path. (Only if the relative path in in same folder or a sub folder.)
  * EX path in a file at 'c:/modules/file1.js' with absolutePathFromRoot: 'modules/sub/file1' => './sub/file1'
  * ( test passed √ )
