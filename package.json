@@ -1,79 +1,79 @@
 {
-	"name": "vsc-move",
-	"displayName": "vsc-move",
-	"description": "Fix problems with moving files in vscode.",
-	"publisher": "alfnielsen",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/alfnielsen/vsc-move"
-	},
-	"homepage": "https://github.com/alfnielsen/vsc-move",
-	"version": "0.1.0",
-	"engines": {
-		"vscode": "^1.32.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:extension.vscMove"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"menus": {
-			"explorer/context": [
-				{
-					"command": "extension.vscMove",
-					"group": "1_modification",
-					"when": "explorerViewletVisible"
-				}
-			]
-		},
-		"commands": [
-			{
-				"command": "extension.vscMove",
-				"title": "vsc Move"
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "vsc Move configuration",
-			"properties": {
-				"vscMove.rootPath": {
-					"type": "string",
-					"default": "/src",
-					"description": "Root folder for csv Move. All paths will be calculatioed from this folder."
-				},
-				"vscMove.filesToHandle": {
-					"type": "string",
-					"default": "css,scss,ts,tsx,js,jsx",
-					"description": "File extansions that vsc Move will handle."
-				},
-				"vscMove.excludePattern": {
-					"type": "string",
-					"default": "",
-					"description": "Regexp patter (as string) that excludes updates of imports. Ex exclude: '.*/\\.storybook/' will exclude updatees of import '../.storybook/reducers'"
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"@types/fs-extra": "^5.0.5",
-		"@types/mocha": "^2.2.48",
-		"@types/node": "^10.12.21",
-		"tslint": "^5.12.1",
-		"vscode": "^1.1.28",
-		"@types/simple-mock": "^0.8.1",
-		"simple-mock": "^0.8.0"
-	},
-	"dependencies": {
-		"fs-extra": "^7.0.1"
-	}
+   "name": "vsc-move",
+   "displayName": "vsc-move",
+   "description": "Fix problems with moving files in vscode.",
+   "publisher": "alfnielsen",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/alfnielsen/vsc-move"
+   },
+   "homepage": "https://github.com/alfnielsen/vsc-move",
+   "version": "0.1.1",
+   "engines": {
+      "vscode": "^1.32.0"
+   },
+   "categories": [
+      "Other"
+   ],
+   "activationEvents": [
+      "onCommand:extension.vscMove"
+   ],
+   "main": "./out/extension.js",
+   "contributes": {
+      "menus": {
+         "explorer/context": [
+            {
+               "command": "extension.vscMove",
+               "group": "1_modification",
+               "when": "explorerViewletVisible"
+            }
+         ]
+      },
+      "commands": [
+         {
+            "command": "extension.vscMove",
+            "title": "vsc Move"
+         }
+      ],
+      "configuration": {
+         "type": "object",
+         "title": "vsc Move configuration",
+         "properties": {
+            "vscMove.rootPath": {
+               "type": "string",
+               "default": "/src",
+               "description": "Root folder for csv Move. All paths will be calculatioed from this folder."
+            },
+            "vscMove.filesToHandle": {
+               "type": "string",
+               "default": "css,scss,ts,tsx,js,jsx",
+               "description": "File extansions that vsc Move will handle."
+            },
+            "vscMove.excludePattern": {
+               "type": "string",
+               "default": "",
+               "description": "Regexp patter (as string) that excludes updates of imports. Ex exclude: '.*/\\.storybook/' will exclude updatees of import '../.storybook/reducers'"
+            }
+         }
+      }
+   },
+   "scripts": {
+      "vscode:prepublish": "npm run compile",
+      "compile": "tsc -p ./",
+      "watch": "tsc -watch -p ./",
+      "postinstall": "node ./node_modules/vscode/bin/install",
+      "test": "npm run compile && node ./node_modules/vscode/bin/test"
+   },
+   "devDependencies": {
+      "@types/fs-extra": "^5.0.5",
+      "@types/mocha": "^2.2.48",
+      "@types/node": "^10.12.21",
+      "tslint": "^5.12.1",
+      "vscode": "^1.1.28",
+      "@types/simple-mock": "^0.8.1",
+      "simple-mock": "^0.8.0"
+   },
+   "dependencies": {
+      "fs-extra": "^7.0.1"
+   }
 }

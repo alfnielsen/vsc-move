@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.1.1
+
+Update readme.
+
 ## 0.1.0
 
 Update to version 0.1.0
