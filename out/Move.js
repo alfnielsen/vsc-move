@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const vsc_base_1 = require("./vsc-base");
+const vsc = require("vsc-base");
 'use strict';
 class Move {
     constructor() {
@@ -20,7 +20,7 @@ class Move {
      */
     findFiles(pattern = this.defineGetFilesPattern()) {
         return __awaiter(this, void 0, void 0, function* () {
-            const files = yield vsc_base_1.default.findFilePaths(pattern);
+            const files = yield vsc.findFilePaths(pattern);
             return files;
         });
     }
@@ -29,14 +29,14 @@ class Move {
      */
     defineGetFilesPattern() {
         let rootPath = this.getConfig('rootPath', '/src');
-        rootPath = vsc_base_1.default.trimLeadingDash(rootPath);
+        rootPath = vsc.trimLeadingDash(rootPath);
         let filesToHandle = this.getConfig('filesToHandle', 'css,scss,ts,tsx,js,jsx');
         filesToHandle.replace(/\s/, ''); //trim spaces!
         const pattern = `${rootPath}/**/*.{${filesToHandle}}`;
         return pattern;
     }
     getConfig(property, defaultValue) {
-        return vsc_base_1.default.getConfig('vscMove', property, defaultValue);
+        return vsc.getConfig('vscMove', property, defaultValue);
     }
     setupExcludePattern() {
         const excludePatternString = this.getConfig('excludePattern', undefined);
@@ -51,49 +51,49 @@ class Move {
     run(uri /*, uris?: vscode.Uri[] */) {
         return __awaiter(this, void 0, void 0, function* () {
             if (uri === undefined) {
-                vsc_base_1.default.showMessage('This can only be run from right click context menu.');
+                vsc.showMessage('This can only be run from right click context menu.');
                 return;
             }
-            let rootPath = vsc_base_1.default.getRootPath(uri);
+            let rootPath = vsc.getRootPath(uri.fsPath);
             if (!rootPath) {
-                vsc_base_1.default.showMessage('File most be in a workspace project.');
+                vsc.showMessage('File most be in a workspace project.');
                 return;
             }
-            const path = vsc_base_1.default.pathAsUnix(uri.fsPath);
+            const path = vsc.pathAsUnix(uri.fsPath);
             this.runBase(path, rootPath);
         });
     }
     runBase(path, rootPath) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isDir = yield vsc_base_1.default.isDir(path);
+            const isDir = yield vsc.isDir(path);
             // set root to project subfolder
             const rootPathFolder = this.getConfig('rootPath', '/src');
             rootPath = rootPath + rootPathFolder;
             // ask user for new path
             let question = isDir ? 'New dir path' : 'New file path';
-            const newPath = yield vsc_base_1.default.ask(question, path);
+            const newPath = yield vsc.ask(question, path);
             if (!newPath) {
                 return;
             }
-            if (!vsc_base_1.default.doesExists(path)) {
-                vsc_base_1.default.showMessage(`File on path not found: ${path}`);
+            if (!vsc.doesExists(path)) {
+                vsc.showMessage(`File on path not found: ${path}`);
                 return;
             }
             const startTime = process.hrtime();
             this.setupExcludePattern();
             // rewrite all imports then move then rewrite again!
             try {
-                yield vsc_base_1.default.move(path, newPath);
+                yield vsc.move(path, newPath);
             }
             catch (e) {
-                vsc_base_1.default.showErrorMessage(e);
-                yield vsc_base_1.default.sleep(1000);
+                vsc.showErrorMessage(e);
+                yield vsc.sleep(1000);
                 return;
             }
             let endTime = process.hrtime(startTime);
             yield this.updateImportInAllFilesForMovingItem(isDir, newPath, path, rootPath);
             endTime = process.hrtime(startTime);
-            vsc_base_1.default.showMessage(`vsc Move finished in ${endTime[0]}s ${endTime[1]}ms`);
+            vsc.showMessage(`vsc Move finished in ${endTime[0]}s ${endTime[1]}ms`);
         });
     }
     updateImportInAllFilesForMovingItem(isDir, newPath, oldPath, rootPath) {
@@ -103,10 +103,10 @@ class Move {
             const files = yield this.findFiles();
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                const fileSource = yield vsc_base_1.default.getFileContent(file);
+                const fileSource = yield vsc.getFileContent(file);
                 let newSource = this.rewriteImports(file, fileSource, oldPath, rootPath, isDir, regexp, newPathFromRoot, newPath);
                 if (fileSource !== newSource) {
-                    yield vsc_base_1.default.saveFileContent(file, newSource);
+                    yield vsc.saveFileContent(file, newSource);
                 }
             }
         });
@@ -140,14 +140,14 @@ class Move {
     }
     changeMatchedImportToAbsolutePath(match, importSource, path, rootPath, subtractLocalPath = true) {
         let importRelatriveToPath = match[2];
-        let absolutePath = vsc_base_1.default.relatrivePathToAbsolutePath(path, importRelatriveToPath, rootPath);
+        let absolutePath = vsc.getAbsolutePathFromRelatrivePath(path, importRelatriveToPath, rootPath);
         if (absolutePath === undefined) {
             // for now we doe this for files not found!!
             absolutePath = importRelatriveToPath;
         }
         let newPath;
         if (subtractLocalPath) {
-            newPath = vsc_base_1.default.absolutePathToSubRalative(path, absolutePath, rootPath);
+            newPath = vsc.getSubrelativePathFromAbsoluteRootPath(path, absolutePath, rootPath);
         }
         else {
             newPath = absolutePath;
@@ -157,8 +157,8 @@ class Move {
         return newSource;
     }
     getImportReplaceRegExp(path, rootPath, isDir) {
-        let pathFromRoot = vsc_base_1.default.subtractPath(path, rootPath);
-        pathFromRoot = vsc_base_1.default.trimLeadingDash(pathFromRoot);
+        let pathFromRoot = vsc.subtractPath(path, rootPath);
+        pathFromRoot = vsc.trimLeadingDash(pathFromRoot);
         let regExp;
         if (isDir) {
             regExp = new RegExp(`((?:^|[\s\n]*\n)@?import\s*[^'"]*['"])${pathFromRoot}(\/[^'"]*['"])`, 'g');
@@ -175,8 +175,8 @@ class Move {
         return regExp;
     }
     getNewPathFromRoot(rootPath, newPath, isDir) {
-        let newPathFromRoot = vsc_base_1.default.subtractPath(newPath, rootPath);
-        newPathFromRoot = vsc_base_1.default.trimLeadingDash(newPathFromRoot);
+        let newPathFromRoot = vsc.subtractPath(newPath, rootPath);
+        newPathFromRoot = vsc.trimLeadingDash(newPathFromRoot);
         if (!isDir) {
             newPathFromRoot = newPathFromRoot.replace(/\.(tsx?|jsx?)$/, '');
         }
@@ -184,7 +184,7 @@ class Move {
     }
     rewriteImports(file, fileSource, oldPath, rootPath, isDir, regexp, newPathFromRoot, newFullPath) {
         //update to absolute paths
-        const isSubPath = vsc_base_1.default.isSubPath(file, oldPath);
+        const isSubPath = vsc.isSubPath(file, oldPath);
         const isMovingFile = file === newFullPath;
         const absoluteFilePath = isSubPath || isMovingFile ? oldPath : file;
         const sourceWithAbsolutePaths = this.changeImportsToAbsolutePath(fileSource, absoluteFilePath, rootPath, false);

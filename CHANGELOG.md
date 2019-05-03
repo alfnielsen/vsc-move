@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.1.2
+
+Update dependencies.
+This update is primary done doe to vulnerability alert from github:
+https://nvd.nist.gov/vuln/detail/CVE-2018-20834
+
 ## 0.1.1
 
 Update readme.

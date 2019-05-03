@@ -1,4 +1,4 @@
-import vsc from './vsc-base'
+import * as vsc from 'vsc-base'
 import * as vscode from 'vscode'
 
 'use strict'
@@ -43,13 +43,12 @@ export default class Move {
 			vsc.showMessage('This can only be run from right click context menu.')
 			return
 		}
-		let rootPath = vsc.getRootPath(uri)
+		let rootPath = vsc.getRootPath(uri.fsPath)
 		if (!rootPath) {
 			vsc.showMessage('File most be in a workspace project.')
 			return
 		}
 		const path = vsc.pathAsUnix(uri.fsPath)
-
 		this.runBase(path, rootPath)
 	}
 
@@ -135,14 +134,14 @@ export default class Move {
 		subtractLocalPath = true
 	) {
 		let importRelatriveToPath = match[2]
-		let absolutePath = vsc.relatrivePathToAbsolutePath(path, importRelatriveToPath, rootPath)
+		let absolutePath = vsc.getAbsolutePathFromRelatrivePath(path, importRelatriveToPath, rootPath)
 		if (absolutePath === undefined) {
 			// for now we doe this for files not found!!
 			absolutePath = importRelatriveToPath
 		}
 		let newPath: string
 		if (subtractLocalPath) {
-			newPath = vsc.absolutePathToSubRalative(path, absolutePath, rootPath)
+			newPath = vsc.getSubrelativePathFromAbsoluteRootPath(path, absolutePath, rootPath)
 		} else {
 			newPath = absolutePath
 		}
